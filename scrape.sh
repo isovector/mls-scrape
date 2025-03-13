@@ -11,4 +11,4 @@ curl 'https://services.onehome.com/graphql?GetListings' \
   -H 'sec-fetch-site: same-site' \
   -H 'sec-gpc: 1' \
   -H 'withcredentials: true' \
-  --data-raw "$(<query)"
+  --data-raw "$(<query.gql)"
