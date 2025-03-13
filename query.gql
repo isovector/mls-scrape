@@ -1,0 +1,126 @@
+{ "operationName":"GetListings"
+, "variables":
+  { "browseParameter":
+    { "searchQuery":
+      [ {"type":"RANGE" ,"fieldName":"property.ListPrice" ,"values":["400000" ,"1000000000"]}
+      , {"type":"LIVING_AREA" ,"fieldName":"property.LivingAreaTotal" ,"values":[1000 ,"1000000000"]}
+      , {"type":"RANGE" ,"fieldName":"property.YearBuilt" ,"values":["0" ,"1980"]}
+      , {"type":"LISTING_TYPE" ,"fieldName":"" ,"values":["FOR_SALE"]}
+      , {"type":"PROPERTY_TYPE" ,"fieldName":"" ,"values":["House" ,"Townhouse" ,"MultiFamily"]}
+      ]
+    , "sort":{"name":"property.ListPrice" ,"order":"ASC"}
+    , "polygon":
+      [ {"latitude":48.469954057029874 ,"longitude":-123.31136772138488}
+      , {"latitude":48.374374527076235 ,"longitude":-123.31136772138488}
+      , {"latitude":48.374374527076235 ,"longitude":-123.44354698163879}
+      , {"latitude":48.469954057029874 ,"longitude":-123.44354698163879}
+      ]
+    , "pageInput":{"pageNum":0 ,"size":1}
+    }
+    ,"groupId":"55024268-1137-3693-9705-c74883eb6fed"
+    ,"includeDislikes":false}
+    ,"query":"
+
+query GetListings($groupId: String\u0021, $browseParameter: BrowseParameter, $includeDislikes: Boolean) {
+  listings(groupId: $groupId, browseParameter: $browseParameter, includeDislikes: $includeDislikes) {
+    pageInfo { ...pageInfo }
+    listings { ...shortListingDetails }
+  }
+}
+
+fragment pageInfo on PageInfo {
+  totalElements
+  totalPages
+  pageNumber
+  pageSize
+}
+
+fragment shortListingDetails on ListingDetail {
+  id
+  property {
+    StreetNumber
+      StreetName
+      StreetSuffix
+      UnitNumber
+      City
+      PostalCity
+      PostalCode
+      SpecialListingConditions
+      NewConstructionYN
+      ListPrice
+      ListingId
+      LivingArea
+      PropertyType
+      BedroomsTotal
+      BathroomsTotalInteger
+      LivingAreaTotal
+      BuildingAreaTotal
+      Latitude
+      Longitude
+      LotSizeArea
+      LotSizeUnits
+      PropertySubType
+      StructureType
+      PreviousListPrice
+      StandardStatus
+      AboveGradeFinishedArea
+      AboveGradeFinishedAreaUnits
+      YearBuilt
+      FireplaceYN
+      Ownership
+      DirectionFaces
+      LotFeatures
+      CarportYN
+      GarageYN
+      ExteriorFeatures
+      Fencing
+      WaterfrontYN
+      ViewYN
+      View
+      ConstructionMaterials
+      Roof
+      FoundationDetails
+      StoriesTotal
+      Zoning
+      ZoningDescription
+      TaxAssessedValue
+      TaxYear
+      TaxAnnualAmount
+      DaysOnMarket
+      RoomsTotal
+  }
+  rooms {
+    RoomType
+    RoomLevel
+    RoomDimensions
+    RoomLength
+    RoomWidth
+    RoomFeatures
+    RoomFlooring
+    RoomDescription
+  }
+  media {
+    LongDescription
+    ShortDescription
+    ImageOf
+    MediaType
+    Image {
+      Thumbnail { ...imageDetails }
+      Medium { ...imageDetails }
+      Large { ...imageDetails }
+    }
+  }
+  sourceMedia { ...SourceMediaFields }
+}
+
+fragment imageDetails on Image {
+  mediaUrl
+}
+
+fragment SourceMediaFields on SourceMedia {
+  MediaObjectID
+    LongDescription
+    ShortDescription
+    sourceMediaLink
+}
+"}
