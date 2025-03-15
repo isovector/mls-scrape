@@ -35,6 +35,7 @@ fragment pageInfo on PageInfo {
 fragment shortListingDetails on ListingDetail {
   id
   property {
+    PublicRemarks
     StreetNumber
       StreetName
       StreetSuffix

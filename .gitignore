@@ -4,3 +4,4 @@ authv3
 token
 secrets/
 artifacts/
+cache/

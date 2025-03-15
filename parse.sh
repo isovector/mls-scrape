@@ -3,7 +3,7 @@ jq '[.data.listings.listings.[]
   #| select(.property.City == "Victoria" or .property.City == "Saanich" or .property.City == "Esquimalt")
   #| select(.property.LivingArea >= 1100)
   # | select(.property.YearBuilt <= 1946)
-  | {  address:
+  | { address:
         ( .property.StreetNumber
         + " "
         + .property.StreetName
@@ -40,7 +40,8 @@ jq '[.data.listings.listings.[]
     , fireplace: .property.FireplaceYN
     , view: (.property.View // []) | join(",")
     , onMarket: .property.DaysOnMarket
-    , link: ("https://portal.onehome.com/en-CA/property/" + .id + '"$(<secrets/token)"')
+    , link: ("https://portal.onehome.com/en-CA/property/" + .id + '"$(<secrets/token)"'")
+    , description: .property.PublicRemarks
     , floorplan:
         (( .sourceMedia .[] | select(.LongDescription | ascii_downcase == "floor plans") .sourceMediaLink
         ) // "") # .sourceMedia)

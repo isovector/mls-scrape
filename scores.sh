@@ -1,9 +1,12 @@
-LAT=$1
-LNG=$2
+set -e
 
-echo "["
+KEY=$1
+LAT=$2
+LNG=$3
 
-curl "https://services.onehome.com/api/locallogic/scores?lat=${LAT}&lng=${LNG}&locale=en" \
+echo '{"address": "'"${KEY}"'"}'
+
+curl -sS "https://services.onehome.com/api/locallogic/scores?lat=${LAT}&lng=${LNG}&locale=en" \
   -H 'accept: application/json' \
   -H 'accept-language: en-GB,en-US;q=0.9,en;q=0.8' \
   -H "$(<secrets/auth)" \
@@ -17,11 +20,9 @@ curl "https://services.onehome.com/api/locallogic/scores?lat=${LAT}&lng=${LNG}&l
   -H 'sec-fetch-mode: cors' \
   -H 'sec-fetch-site: same-site' \
   -H 'sec-gpc: 1' \
-  -H 'withcredentials: true' \
-  | jq '.data.location | [ keys[] as $k | { $k: .[$k].value } ] | add'
-echo ","
+  -H 'withcredentials: true' | jq -r '.data.location'
 
-curl "https://api.locallogic.co/v3/scores?lat=${LAT}&lng=${LNG}&include=groceries%2Crestaurants%2Cshopping%2Ccafes&geography_levels=20%2C30&location_scores_rounding=none&language=en" \
+curl -sS "https://api.locallogic.co/v3/scores?lat=${LAT}&lng=${LNG}&include=groceries%2Crestaurants%2Cshopping%2Ccafes&geography_levels=20%2C30&location_scores_rounding=none&language=en" \
   -H 'accept: application/json' \
   -H 'accept-language: en-GB,en-US;q=0.9,en;q=0.8' \
   -H "$(<secrets/authv3)" \
@@ -35,7 +36,4 @@ curl "https://api.locallogic.co/v3/scores?lat=${LAT}&lng=${LNG}&include=grocerie
   -H 'sec-fetch-mode: cors' \
   -H 'sec-fetch-site: same-site' \
   -H 'sec-gpc: 1' \
-  -H 'withcredentials: true' \
-  | jq '.data.location | [ keys[] as $k | { $k: .[$k].value } ] | add'
-
-echo "]"
+  -H 'withcredentials: true' | jq '.data.location'
