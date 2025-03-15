@@ -1,0 +1,15 @@
+{
+    "databases": {
+        "db": {
+            "tables": {
+                "properties": {
+                    "plugins": {
+                        "datasette-render-html": {
+                            "columns": ["link"]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,7 +1,7 @@
 curl 'https://services.onehome.com/graphql?GetListings' \
   -H 'accept: application/json, text/plain, */*' \
   -H 'accept-language: en-GB,en-US;q=0.9,en;q=0.8' \
-  -H "$(<auth)" \
+  -H "$(<secrets/auth)" \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
   -H 'pragma: no-cache' \

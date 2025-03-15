@@ -2,10 +2,7 @@
 , "variables":
   { "browseParameter":
     { "searchQuery":
-      [ {"type":"RANGE" ,"fieldName":"property.ListPrice" ,"values":["400000" ,"1000000000"]}
-      , {"type":"LIVING_AREA" ,"fieldName":"property.LivingAreaTotal" ,"values":[1000 ,"1000000000"]}
-      , {"type":"RANGE" ,"fieldName":"property.YearBuilt" ,"values":["0" ,"1980"]}
-      , {"type":"LISTING_TYPE" ,"fieldName":"" ,"values":["FOR_SALE"]}
+      [ {"type":"LISTING_TYPE" ,"fieldName":"" ,"values":["FOR_SALE"]}
       , {"type":"PROPERTY_TYPE" ,"fieldName":"" ,"values":["House" ,"Townhouse" ,"MultiFamily"]}
       ]
     , "sort":{"name":"property.ListPrice" ,"order":"ASC"}
@@ -15,7 +12,7 @@
       , {"latitude":48.374374527076235 ,"longitude":-123.44354698163879}
       , {"latitude":48.469954057029874 ,"longitude":-123.44354698163879}
       ]
-    , "pageInput":{"pageNum":0 ,"size":1}
+    , "pageInput":{"pageNum":0 ,"size":1000}
     }
     ,"groupId":"55024268-1137-3693-9705-c74883eb6fed"
     ,"includeDislikes":false}

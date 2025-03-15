@@ -1,20 +1,15 @@
 jq '[.data.listings.listings.[]
-  | select(.property.ListPrice < 1200000)
-  | select(.property.City == "Victoria" or .property.City == "Saanich" or .property.City == "Esquimalt")
-  | select(.property.LivingArea >= 1100)
+  #| select(.property.ListPrice < 1200000)
+  #| select(.property.City == "Victoria" or .property.City == "Saanich" or .property.City == "Esquimalt")
+  #| select(.property.LivingArea >= 1100)
   # | select(.property.YearBuilt <= 1946)
-  | { score: 50
-    , link: ("https://portal.onehome.com/en-CA/property/" + .id + '"$(<token)"')
-    , address:
+  | {  address:
         ( .property.StreetNumber
         + " "
         + .property.StreetName
         + " "
         + .property.StreetSuffix
         )
-    , floorplan:
-        (( .sourceMedia .[] | select(.LongDescription | ascii_downcase == "floor plans") .sourceMediaLink
-         ) // .sourceMedia)
     , city: .property.City
     , price: .property.ListPrice
     , fees: (.property.AssociationFee // 0)
@@ -26,7 +21,7 @@ jq '[.data.listings.listings.[]
     , beds: .property.BedroomsTotal
     , baths: .property.BathroomsTotalInteger
     , rooms: .property.RoomsTotal
-    , stories: (.rooms|map(.RoomLevel)|unique)|join(",")
+    , floors:  (.property.StoriesTotal // (.rooms|map(.RoomLevel)|unique|length))
     , type: .property.PropertySubType
     , dining: any(.rooms.[]; any((.RoomType // []).[]; . == "DiningRoom"))
     , fireplace: .property.FireplaceYN
@@ -36,12 +31,21 @@ jq '[.data.listings.listings.[]
            )
         or any((.property.ExteriorFeatures // []).[]; . == "Balcony" or . == "Deck"))
     , workshop:
-        any(.rooms.[]
+        (any(.rooms.[]
            ; any((.RoomType // []).[]; . == "Workshop")
-           )
+           ) or .property.GarageYN)
     , garden: any((.property.ExteriorFeatures // []).[]; . == "Garden")
     , facing: .property.DirectionFaces
     , zoning: .property.ZoningDescription
+    , fireplace: .property.FireplaceYN
+    , view: (.property.View // []) | join(",")
+    , onMarket: .property.DaysOnMarket
+    , link: ("https://portal.onehome.com/en-CA/property/" + .id + '"$(<secrets/token)"')
+    , floorplan:
+        (( .sourceMedia .[] | select(.LongDescription | ascii_downcase == "floor plans") .sourceMediaLink
+        ) // "") # .sourceMedia)
+    , latitude: .property.Latitude
+    , longitude: .property.Longitude
     }]
-#      | (.[0] | to_entries | map(.key)), (.[] | [.[]]) | @csv
-    ' < json
+      | (.[0] | to_entries | map(.key)), (.[] | [.[]]) | @csv
+    ' -r < artifacts/json
