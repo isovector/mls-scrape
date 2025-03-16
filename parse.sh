@@ -42,11 +42,24 @@ jq '[.data.listings.listings.[]
     , onMarket: .property.DaysOnMarket
     , link: ("https://portal.onehome.com/en-CA/property/" + .id + '"$(<secrets/token)"'")
     , description: .property.PublicRemarks
-    , floorplan:
-        (( .sourceMedia .[] | select(.LongDescription | ascii_downcase == "floor plans") .sourceMediaLink
-        ) // "") # .sourceMedia)
+    # , floorplan:
+    #     (( .sourceMedia .[] | select(.LongDescription | ascii_downcase == "floor plans") .sourceMediaLink
+    #     ) // "") # .sourceMedia)
     , latitude: .property.Latitude
     , longitude: .property.Longitude
+    , popup:
+        { image: (.media.[].Image.Medium.mediaUrl // "")
+        , title: ( .property.StreetNumber
+                  + " "
+                  + .property.StreetName
+                  + " "
+                  + .property.StreetSuffix
+                  )
+        , description:
+            ( "Price: $" + (.property.ListPrice | tostring)
+            )
+        , link: ("https://portal.onehome.com/en-CA/property/" + .id + '"$(<secrets/token)"'" // "")
+        } | tostring
     }]
-      | (.[0] | to_entries | map(.key)), (.[] | [.[]]) | @csv
+       | (.[0] | to_entries | map(.key)), (.[] | [.[]]) | @csv
     ' -r < artifacts/json
