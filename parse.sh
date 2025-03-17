@@ -12,8 +12,8 @@ jq '[.data.listings.listings.[]
         )
     , city: .property.City
     , price: .property.ListPrice
-    , fees: (.property.AssociationFee // 0)
-    , tax : .property.TaxAnnualAmount
+    # , fees: (.property.AssociationFee // 0)
+    , monthlyCost: ((((((.property.ListPrice // 0) | tonumber) - 500000) / 100000) * 500) + (((.property.TaxAnnualAmount // 0) | tonumber) / 12) + (((.property.AssociationFee // 0) | tonumber)))
     , assessed : .property.TaxAssessedValue
     , sqft: .property.LivingArea
     , lot: .property.LotSizeArea
